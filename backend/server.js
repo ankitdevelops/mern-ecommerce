@@ -1,0 +1,34 @@
+import express from "express";
+import dotenv from "dotenv";
+import path from "path";
+import connectDB from "./config/db.js";
+import config from "./config/index.js";
+
+dotenv.config();
+connectDB();
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.send("Hello There");
+});
+
+const __dirname = path.resolve();
+app.all("*", (req, res) => {
+  res.status(404);
+  if (req.accepts("html")) {
+    res.sendFile(path.join(__dirname, "backend", "views", "404.html"));
+  } else if (req.accepts("json")) {
+    res.json({
+      message: "404 not Found",
+    });
+  } else {
+    res.type("txt").send("404 not found");
+  }
+});
+
+app.listen(config.PORT, () => {
+  console.log("Server is running on PORT", config.PORT);
+});
