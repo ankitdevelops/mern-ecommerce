@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 import path from "path";
 import connectDB from "./config/db.js";
 import config from "./config/index.js";
+import corsOptions from "./config/corsOptions.js";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 connectDB();
@@ -10,6 +13,8 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors(corsOptions));
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello There");
