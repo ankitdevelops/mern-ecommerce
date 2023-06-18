@@ -6,6 +6,8 @@ import config from "./config/index.js";
 import corsOptions from "./config/corsOptions.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import ErrorHandler from "./middleware/errorHandler.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -15,10 +17,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 app.use(cookieParser());
+app.use(ErrorHandler);
 
 app.get("/", (req, res) => {
   res.send("Hello There");
 });
+app.use("/api/users", userRoutes);
 
 const __dirname = path.resolve();
 app.all("*", (req, res) => {
