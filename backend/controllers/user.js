@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import asyncHandler from "../services/asyncHandler.js";
 import mailHelper from "../utils/mailHelper.js";
+import crypto from "crypto";
 
 export const cookieOptions = {
   expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
@@ -117,7 +118,7 @@ const login = asyncHandler(async (req, res) => {
 
 /**
  * Logout a new User
- * @route POST /api/users/
+ * @route POST /api/users/logout
  * @param {object} req - The request object
  * @param {object} res - The response object
  * @returns {object} The JWT token in response and user object.
@@ -136,4 +137,104 @@ const logout = asyncHandler(async (_req, res) => {
   });
 });
 
-export { registerUser, login, logout };
+/**
+ * Forgot Password
+ * @route POST /api/users/password/forgot
+ * @param {object} req - The request object
+ * @param {object} res - The response object
+ * @returns {email} token to reset the password
+ * @throws {object} Returns a 500 if email is not sent
+ */
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    res.status(400);
+    throw new Error("Invalid Request");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(404);
+    throw new Error("user not found");
+  }
+
+  const resetToken = user.generateForgotPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  const resetUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/api/users/password/reset/${resetToken}`;
+
+  const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
+  try {
+    await mailHelper({
+      email: user.email,
+      subject: "Password reset token",
+      message,
+    });
+
+    res.status(200).json({
+      message: `Email sent to: ${user.name}`,
+    });
+  } catch (err) {
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+
+    await user.save({ validateBeforeSave: false });
+    res.status(500);
+    throw new Error(err.message || "Email could not be sent");
+  }
+});
+
+/**
+ * Reset Password
+ * @route POST /api/users/password/reset/:token
+ * @param {object} req - The request object
+ * @param {object} res - The response object
+ * @returns {email} user object
+ * @throws {object} Returns a 500 if email is not sent
+ */
+
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token: resetToken } = req.params;
+  const { password, confirmPassword } = req.body;
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  const user = await User.findOne({
+    forgotPasswordToken: resetPasswordToken,
+    forgotPasswordExpiry: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    res.status(404);
+    throw new Error("user not found");
+  }
+
+  if (password !== confirmPassword) {
+    res.status(400);
+    throw new Error("Password don't match");
+  }
+
+  user.password = password;
+  user.forgotPasswordToken = undefined;
+  user.forgotPasswordExpiry = undefined;
+
+  await user.save();
+
+  const token = user.getJwtToken();
+  user.password = undefined;
+  res.cookie("token", token, cookieOptions);
+
+  res.status(200).json({
+    user,
+    token,
+  });
+});
+
+export { registerUser, login, logout, forgotPassword, resetPassword };
