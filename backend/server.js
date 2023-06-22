@@ -8,6 +8,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import ErrorHandler from "./middleware/errorHandler.js";
 import userRoutes from "./routes/userRoutes.js";
+import collectionRoutes from "./routes/collectionRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
   res.send("Hello There");
 });
 app.use("/api/users", userRoutes);
+app.use("/api/collection", collectionRoutes);
 
 const __dirname = path.resolve();
 app.all("*", (req, res) => {
