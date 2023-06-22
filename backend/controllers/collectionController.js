@@ -1,6 +1,14 @@
 import Collection from "../models/collectionModel.js";
 import asyncHandler from "../services/asyncHandler.js";
 
+/**
+ * @desc Create a new collection
+ * @route POST /api/collection
+ * @param {object} req - The request object
+ * @param {object} res - The response object
+ * @returns {object} - newly created collection
+ * @access Admin or staff
+ */
 const createCollection = asyncHandler(async (req, res) => {
   const { name } = req.body;
 
@@ -24,6 +32,15 @@ const createCollection = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @desc update collection
+ * @route PUT /api/collection
+ * @param {object} req - The request object
+ * @param {object} res - The response object
+ * @returns {object} - updated collection
+ * @access Admin or staff
+ */
+
 const updateCollection = asyncHandler(async (req, res) => {
   const { id: collectionID } = req.params;
   const { name } = req.body;
@@ -33,8 +50,8 @@ const updateCollection = asyncHandler(async (req, res) => {
     throw new Error("Invalid request");
   }
 
-  const collection = await Collection.findByIdAndUpdate(
-    collectionID,
+  const collection = await Collection.findOneAndUpdate(
+    { _id: collectionID, isActive: true },
     {
       name,
     },
@@ -51,12 +68,23 @@ const updateCollection = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(500);
-    throw new Error("something went wrong");
+    throw new Error("Collection not found");
   }
 });
 
+/**
+ * @desc get all collections
+ * @route GET /api/collection
+ * @param {object} req - The request object
+ * @param {object} res - The response object
+ * @returns {object} - All collections from db
+ * @access Public
+ */
+
 const getAllCollection = asyncHandler(async (_req, res) => {
-  const collections = await Collection.find();
+  const collections = await Collection.find({ isActive: true }).sort({
+    createdAt: -1,
+  });
 
   if (collections) {
     res.status(200).json(collections);
@@ -66,6 +94,14 @@ const getAllCollection = asyncHandler(async (_req, res) => {
   }
 });
 
+/**
+ * @desc delete collection
+ * @route DELETE /api/collection
+ * @param {object} req - The request object
+ * @param {object} res - The response object
+ * @returns {object} - message after successful deletion
+ * @access Admin or staff
+ */
 const deleteCollection = asyncHandler(async (req, res) => {
   const { id: collectionID } = req.params;
 
@@ -73,15 +109,17 @@ const deleteCollection = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid request");
   }
-  const collection = await Collection.findByIdAndDelete(collectionID);
+  const collection = await Collection.findById(collectionID);
 
   if (collection) {
+    collection.isActive = false;
+    await collection.save();
     res.status(200).json({
       message: "Collection has been deleted successfully",
     });
   } else {
     res.status(500);
-    throw new Error("something went wrong");
+    throw new Error("Collection not found");
   }
 });
 
