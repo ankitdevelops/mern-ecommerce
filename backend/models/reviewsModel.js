@@ -8,6 +8,10 @@ const reviewSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

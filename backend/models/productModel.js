@@ -22,6 +22,9 @@ const productSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
+        public_id: {
+          type: String,
+        },
       },
     ],
     stock: {
@@ -43,6 +46,10 @@ const productSchema = new mongoose.Schema(
     reviews: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Review",
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }
