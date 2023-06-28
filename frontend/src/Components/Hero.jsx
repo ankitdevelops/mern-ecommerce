@@ -2,7 +2,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <div className="carousel w-full max-h-96">
+    <div className="carousel w-full max-h-96 min-h-96">
       <div id="slide1" className="carousel-item relative w-full">
         <img
           src="https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
