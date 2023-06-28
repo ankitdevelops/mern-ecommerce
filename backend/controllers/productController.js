@@ -39,7 +39,7 @@ const createProduct = asyncHandler(async (req, res) => {
     name,
     description,
     brand,
-    collection,
+    collectionId: collection,
     price,
     stock,
   });
@@ -142,21 +142,22 @@ const getProductById = asyncHandler(async (req, res) => {
  */
 const getProductByCollection = asyncHandler(async (req, res) => {
   const { id: collectionId } = req.params;
+  console.log("first");
 
   const collection = await Collection.findOne({
     _id: collectionId,
     isActive: true,
   });
-
+  console.log(collection);
   if (!collection) {
     return res.status(404).json({ error: "Collection not found" });
   }
 
   const products = await Product.find({
-    collectionId,
+    collectionId: collection,
     isActive: true,
   });
-
+  console.log(products);
   if (products) {
     res.status(200).json(products);
   } else {
