@@ -212,7 +212,7 @@ const updateProductInfo = asyncHandler(async (req, res) => {
 
   await product.save();
 
-  res.json(product);
+  res.status(200).json(product);
 });
 
 /**
