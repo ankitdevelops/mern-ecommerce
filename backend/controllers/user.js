@@ -18,9 +18,9 @@ export const cookieOptions = {
  */
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !confirmPassword) {
     res.status(400);
     throw new Error("All fields are required");
   }
@@ -32,6 +32,10 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already Exists");
   }
 
+  if (password !== confirmPassword) {
+    res.status(400);
+    throw new Error("password don't match");
+  }
   const user = await User.create({
     name,
     email,
