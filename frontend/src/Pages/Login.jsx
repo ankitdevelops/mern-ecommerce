@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { loginUser } from "../features/authSlice";
+import { loginUser } from "../features/auth/authSlice";
 import Loader from "../Components/Loader";
 const Login = () => {
   const dispatch = useDispatch();
