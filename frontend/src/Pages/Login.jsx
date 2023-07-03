@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authSlice";
 import Loader from "../Components/Loader";
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { status } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
@@ -32,6 +34,7 @@ const Login = () => {
         .unwrap()
         .then((user) => {
           console.log(`welcome back ${user.name}`);
+          navigate("/");
         })
         .catch((error) => {
           console.log(error);
@@ -58,8 +61,9 @@ const Login = () => {
       <div className="md:w-1/4 p-8 my-5 w-full card card-body bg-base-300 ">
         <h1 className="text-5xl font-bold mb-5 text-center">Welcome Back!</h1>
         <p className="py-6 w-11/12 mx-auto text-lg">
-          Step back into fashion paradise! Login to your account and explore a
-          world of endless style possibilities.
+          Revive your tech experience: Log in now to discover new arrivals,
+          personalized recommendations, and unbeatable offers that will leave
+          you electrified!
         </p>
         <form onSubmit={handleSubmit}>
           <div className="form-control mb-4">
@@ -103,7 +107,7 @@ const Login = () => {
             type="submit"
             disabled={status == "pending"}
           >
-            SignUp Now{" "}
+            Login Now{" "}
             {status == "pending" && <Loader size={15} color={"#fff"} />}
           </button>
         </form>

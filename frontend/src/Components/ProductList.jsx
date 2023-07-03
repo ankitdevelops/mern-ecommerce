@@ -1,16 +1,12 @@
 import Product from "./Product";
 
-const ProductList = () => {
+const ProductList = ({ products }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-7 sm:gap-10">
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
-      <Product />
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 sm:gap-10">
+      {products &&
+        products.map((product) => (
+          <Product key={product._id} product={product} />
+        ))}
     </div>
   );
 };

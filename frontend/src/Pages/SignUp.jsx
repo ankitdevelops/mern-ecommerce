@@ -69,8 +69,8 @@ const SignUp = () => {
       <div className="md:w-1/4 p-8 my-5 w-full card card-body bg-base-300 ">
         <h1 className="text-5xl font-bold mb-5 text-center">SignUp now!</h1>
         <p className="py-6 w-11/12 mx-auto text-lg">
-          Step into a world of style and fashion. Sign up now to unlock
-          exclusive deals and curated collections just for you!
+          Sign up now and dive into a world of cutting-edge gadgets,
+          irresistible deals, and limitless possibilities!
         </p>
         <form onSubmit={handleSubmit}>
           <div className="form-control mb-4">

@@ -1,13 +1,16 @@
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
 
   return (
     <div className="navbar bg-base-300">
       <div className="flex-1">
-        <a className="btn btn-ghost normal-case text-xl">TeeVibe</a>
+        <Link className="btn btn-ghost normal-case text-xl" to={"/"}>
+          E-TechBazaar
+        </Link>
       </div>
-      {user && (
+      {user && <p>Hello {user?.name}</p> ? (
         <div className="flex-none">
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -69,11 +72,11 @@ const Header = () => {
             </ul>
           </div>
         </div>
-      ) ? (
-        <></>
       ) : (
         <>
-          <button className="btn btn-primary">Login</button>
+          <Link className="btn btn-primary" to={"login"}>
+            Login
+          </Link>
         </>
       )}
     </div>

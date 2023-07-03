@@ -1,11 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductList from "../Components/ProductList";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getProducts,
+  clearProducts,
+  filterProductsByPrice,
+} from "../features/products/productSlice";
 const ProductsPage = () => {
-  const [price, setPrice] = useState(40);
+  const [price, setPrice] = useState(0);
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.products);
+  // console.log("products", products);
+
+  useEffect(() => {
+    dispatch(getProducts());
+    return () => {
+      dispatch(clearProducts());
+    };
+  }, [dispatch]);
 
   const handlePriceChange = (event) => {
     setPrice(event.target.value);
+    dispatch(filterProductsByPrice(price));
   };
 
   return (
@@ -25,7 +41,7 @@ const ProductsPage = () => {
         </div>
       </div>
       <div className="md:col-span-10 col-span-12  mx-5">
-        <ProductList />
+        <ProductList products={products} />
       </div>
     </div>
   );

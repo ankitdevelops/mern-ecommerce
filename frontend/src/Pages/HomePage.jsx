@@ -1,9 +1,20 @@
-import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts, clearProducts } from "../features/products/productSlice";
 import Hero from "../Components/Hero";
 import Collections from "../Components/Collections";
 import ProductList from "../Components/ProductList";
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.products);
+
+  useEffect(() => {
+    dispatch(getProducts());
+    return () => {
+      dispatch(clearProducts());
+    };
+  }, [dispatch]);
   return (
     <div className="my-5">
       <Hero />
@@ -22,7 +33,7 @@ const HomePage = () => {
           </h1>
         </div>
       </div>
-      <ProductList />
+      <ProductList products={products} />
     </div>
   );
 };
