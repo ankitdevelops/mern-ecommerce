@@ -1,6 +1,6 @@
 import React from "react";
 import Rating from "./Rating";
-
+import { Link } from "react-router-dom";
 const Product = ({ product }) => {
   return (
     // <div className="card card-compact w-full bg-base-300 shadow-xl">
@@ -20,9 +20,9 @@ const Product = ({ product }) => {
     //   </div>
     // </div>
     <div className="relative  flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-      <a
+      <Link
         className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
-        href="#"
+        to={`products/${product?._id}`}
       >
         <img
           className="object-cover"
@@ -32,13 +32,13 @@ const Product = ({ product }) => {
         {/* <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
           39% OFF
         </span> */}
-      </a>
+      </Link>
       <div className="mt-4 px-5 pb-5">
-        <a href="#">
+        <Link to={`products/${product?._id}`}>
           <h5 className="text-xl tracking-tight text-slate-900">
             {product?.name}
           </h5>
-        </a>
+        </Link>
         <div className="mt-2 mb-5 flex items-center justify-between">
           <p>
             <span className="text-3xl font-bold text-slate-900">
