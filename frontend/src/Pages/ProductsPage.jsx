@@ -6,6 +6,7 @@ import {
   clearProducts,
   filterProductsByPrice,
 } from "../features/products/productSlice";
+import Container from "../Components/Container";
 const ProductsPage = () => {
   const [price, setPrice] = useState(0);
   const dispatch = useDispatch();
@@ -25,25 +26,27 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="grid grid-cols-12 my-10">
-      <div className="md:col-span-2 px-2 md:block hidden">
-        <h2 className="text-xl font-bold mb-4">Filter</h2>
-        <div>
-          <label className="label text-xl">Price ₹ {price}</label>
-          <input
-            className="range"
-            type="range"
-            min={0}
-            max="5000"
-            value={price}
-            onChange={handlePriceChange}
-          />
+    <Container>
+      <div className="grid grid-cols-12 my-10">
+        <div className="md:col-span-2 px-2 md:block hidden">
+          <h2 className="text-xl font-bold mb-4">Filter</h2>
+          <div>
+            <label className="label text-xl">Price ₹ {price}</label>
+            <input
+              className="range"
+              type="range"
+              min={0}
+              max="5000"
+              value={price}
+              onChange={handlePriceChange}
+            />
+          </div>
+        </div>
+        <div className="md:col-span-10 col-span-12  mx-5">
+          <ProductList products={products} />
         </div>
       </div>
-      <div className="md:col-span-10 col-span-12  mx-5">
-        <ProductList products={products} />
-      </div>
-    </div>
+    </Container>
   );
 };
 

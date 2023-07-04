@@ -7,9 +7,9 @@ function App() {
   return (
     <>
       <Header />
-      <Container>
-        <Outlet />
-      </Container>
+      {/* <Container> */}
+      <Outlet />
+      {/* </Container> */}
       <Footer />
     </>
   );
