@@ -2,10 +2,14 @@ import User from "../models/user.js";
 import asyncHandler from "../services/asyncHandler.js";
 import mailHelper from "../utils/mailHelper.js";
 import crypto from "crypto";
+import config from "../config/index.js";
 
 export const cookieOptions = {
   expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
   httpOnly: true,
+  secure: config.NODE_ENV !== "development", // Use secure cookies in production
+  sameSite: "strict", // Prevent CSRF attacks
+  maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
 };
 
 /**

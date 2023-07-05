@@ -1,6 +1,8 @@
 import { useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
-
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addNewProduct } from "../../features/products/productSlice";
 const AddProduct = () => {
   const [productName, setProductName] = useState("");
   const [brandName, setBrandName] = useState("");
@@ -9,9 +11,35 @@ const AddProduct = () => {
   const [collection, setCollection] = useState("");
   const [description, setDescription] = useState("");
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { products } = useSelector((state) => state.products);
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log(productName, brandName, price, stock, collection, description);
+    const productData = {
+      name: productName,
+      description: description,
+      brand: brandName,
+      price: price,
+      stock: stock,
+      collectionId: "649bd9b6a0a035be0e03be43",
+    };
+    dispatch(addNewProduct(productData))
+      .unwrap()
+      .then((product) => {
+        console.log(`${product.name} Added To the Stock`);
+        navigate(`/admin/dashboard/product/add-photo/${product._id}`);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+    setBrandName("");
+    setCollection("");
+    setProductName("");
+    setPrice("");
+    setStock("");
+    setDescription("");
   };
 
   return (
@@ -79,7 +107,7 @@ const AddProduct = () => {
           value={collection}
           onChange={(e) => setCollection(e.target.value)}
         >
-          <option disabled selected>
+          <option disabled defaultValue>
             Pick one
           </option>
           <option>Star Wars</option>

@@ -1,14 +1,16 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import SideBar from "../../Components/AdminComponents/SideBar";
 import AdminProductList from "../../Components/AdminComponents/AdminProductList";
 import UserList from "../../Components/AdminComponents/UserList";
 import AddProduct from "../../Components/AdminComponents/AddProduct";
+import ProductPhotos from "../../Components/AdminComponents/ProductPhotos";
 
 const Dashboard = () => {
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
+  const { id } = useParams();
 
   return (
     <div className="flex h-screen">
@@ -24,6 +26,9 @@ const Dashboard = () => {
             <UserList />
           ) : location.pathname === "/admin/dashboard/add-product" ? (
             <AddProduct />
+          ) : location.pathname ===
+            `/admin/dashboard/product/add-photo/${id}` ? (
+            <ProductPhotos />
           ) : (
             <AdminProductList />
           )}
