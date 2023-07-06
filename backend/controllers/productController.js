@@ -62,7 +62,6 @@ const createProduct = asyncHandler(async (req, res) => {
  */
 const addProductPhotos = asyncHandler(async (req, res) => {
   const { id: productId } = req.params;
-
   const form = formidable({ multiples: false, keepExtensions: true });
   form.parse(req, async function (err, fields, files) {
     if (err) {
@@ -77,6 +76,12 @@ const addProductPhotos = asyncHandler(async (req, res) => {
 
     const product = await Product.findOne({ _id: productId });
 
+    if (!product) {
+      res.status(404).json({
+        message: "No Product Found",
+      });
+    }
+
     if (product && files) {
       const data = await cloudinary.v2.uploader.upload(
         files.photo[0].filepath,
@@ -85,7 +90,7 @@ const addProductPhotos = asyncHandler(async (req, res) => {
           if (error) {
             throw new Error(error.message || "Something went wrong");
           }
-          console.log(result);
+
           return result.secure_url;
         }
       );
@@ -97,7 +102,9 @@ const addProductPhotos = asyncHandler(async (req, res) => {
         });
         product.save();
         res.status(200).json({
-          product,
+          secure_url: data.secure_url,
+          public_id: data.public_id,
+          productId: product._id,
         });
       }
     }

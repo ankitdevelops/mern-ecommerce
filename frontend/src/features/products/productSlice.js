@@ -4,6 +4,7 @@ import productService from "./productService";
 const initialState = {
   products: [],
   status: "",
+  singleProduct: null,
 };
 
 export const getProducts = createAsyncThunk(
@@ -32,12 +33,41 @@ export const addNewProduct = createAsyncThunk(
   }
 );
 
+export const addProductPhoto = createAsyncThunk(
+  "products/addProductPhoto",
+  async (data, thunkAPI) => {
+    try {
+      return await productService.addProductPhoto(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message || error.toString()
+      );
+    }
+  }
+);
+
+export const getSingleProduct = createAsyncThunk(
+  "products/getSingleProduct",
+  async (productId, thunkAPI) => {
+    try {
+      return await productService.getSingleProduct(productId);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message || error.toString()
+      );
+    }
+  }
+);
+
 export const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
     clearProducts: (state) => {
       state.products = [];
+    },
+    clearSingleProduct: (state) => {
+      state.singleProduct = null;
     },
     filterProductsByPrice: (state, action) => {
       const maxPrice = action.payload;
@@ -52,17 +82,38 @@ export const productSlice = createSlice({
         state.products = action.payload;
         state.status = "fulfilled";
       })
-      .addCase(getProducts.pending, (state, action) => {
+      .addCase(getProducts.pending, (state) => {
         state.status = "pending";
       })
-      .addCase(getProducts.rejected, (state, action) => {
+      .addCase(getProducts.rejected, (state) => {
         state.status = "rejected";
       })
       .addCase(addNewProduct.fulfilled, (state, action) => {
         state.products.unshift(action.payload);
         state.status = "fulfilled";
+      })
+      .addCase(addNewProduct.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(addNewProduct.rejected, (state) => {
+        state.status = "rejected";
+      })
+      .addCase(addProductPhoto.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.singleProduct.photos.unshift(action.payload);
+      })
+      .addCase(addProductPhoto.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(addProductPhoto.rejected, (state) => {
+        state.status = "rejected";
+      })
+      .addCase(getSingleProduct.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.singleProduct = action.payload;
       });
   },
 });
-export const { clearProducts, filterProductsByPrice } = productSlice.actions;
+export const { clearProducts, filterProductsByPrice, clearSingleProduct } =
+  productSlice.actions;
 export default productSlice.reducer;

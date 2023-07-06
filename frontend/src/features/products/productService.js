@@ -1,5 +1,4 @@
 import axios from "axios";
-axios.defaults.withCredentials = true;
 
 const API_URL = "http://localhost:5000/api/products/";
 
@@ -19,21 +18,31 @@ const addNewProduct = async (productData) => {
   return response.data;
 };
 
-// const filterProductByPrice = (products, maxPrice) => {
-//   return products.filter(function (product) {
-//     return parseFloat(product.price) <= parseFloat(maxPrice);
-//   });
-// };
+const addProductPhoto = async (data) => {
+  const formData = new FormData();
+  formData.append("photo", data.image);
+  const response = await axios.post(`${API_URL}${data.id}`, formData, {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
 
-// function filterProductsByPrice(products, maxPrice) {
-//   return products.filter(function (product) {
-//     return parseFloat(product.price) <= parseFloat(maxPrice);
-//   });
-// }
+const getSingleProduct = async (productId) => {
+  const response = await axios.get(`${API_URL}${productId}`);
+
+  if (response.data) {
+    return response.data;
+  }
+};
 
 const productService = {
   getAllProducts,
   addNewProduct,
+  addProductPhoto,
+  getSingleProduct,
 };
 
 export default productService;

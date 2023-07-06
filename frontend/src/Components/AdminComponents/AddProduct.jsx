@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addNewProduct } from "../../features/products/productSlice";
+import {
+  getAllCollection,
+  clearCollection,
+} from "../../features/collection/collectionSlice";
+import Loader from "../Loader";
+
 const AddProduct = () => {
   const [productName, setProductName] = useState("");
   const [brandName, setBrandName] = useState("");
@@ -13,7 +19,22 @@ const AddProduct = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { products } = useSelector((state) => state.products);
+
+  const { status } = useSelector((state) => state.products);
+  const { collections } = useSelector((state) => state.collection);
+
+  useEffect(() => {
+    dispatch(getAllCollection());
+    return () => {
+      dispatch(clearCollection());
+    };
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (collectionList) {
+  //     setCollection(collectionList);
+  //   }
+  // }, [collectionList]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -23,7 +44,7 @@ const AddProduct = () => {
       brand: brandName,
       price: price,
       stock: stock,
-      collectionId: "649bd9b6a0a035be0e03be43",
+      collectionId: collection,
     };
     dispatch(addNewProduct(productData))
       .unwrap()
@@ -55,6 +76,7 @@ const AddProduct = () => {
           value={productName}
           onChange={(e) => setProductName(e.target.value)}
           className="input  input-lg w-10/12 border-slate-700"
+          required
         />
       </div>
       <div className="form-control w-full">
@@ -68,6 +90,7 @@ const AddProduct = () => {
           value={brandName}
           onChange={(e) => setBrandName(e.target.value)}
           className="input  input-lg w-10/12 border-slate-700"
+          required
         />
       </div>
       <div className="form-control w-full">
@@ -81,6 +104,7 @@ const AddProduct = () => {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           className="input  input-lg w-10/12 border-slate-700"
+          required
         />
       </div>
       <div className="form-control w-full">
@@ -94,6 +118,7 @@ const AddProduct = () => {
           value={stock}
           onChange={(e) => setStock(e.target.value)}
           className="input  input-lg w-10/12 border-slate-700"
+          required
         />
       </div>
 
@@ -108,13 +133,14 @@ const AddProduct = () => {
           onChange={(e) => setCollection(e.target.value)}
         >
           <option disabled defaultValue>
-            Pick one
+            Choose Collection
           </option>
-          <option>Star Wars</option>
-          <option>Harry Potter</option>
-          <option>Lord of the Rings</option>
-          <option>Planet of the Apes</option>
-          <option>Star Trek</option>
+          {collections &&
+            collections.map((collection) => (
+              <option key={collection?._id} value={collection._id}>
+                {collection.name}
+              </option>
+            ))}
         </select>
       </div>
       <div className="form-control">
@@ -126,11 +152,15 @@ const AddProduct = () => {
           value={description}
           onChange={setDescription}
           className="w-10/12"
+          required
         />
       </div>
-      <button className="btn btn-primary mt-3" type="submit">
-        {" "}
-        Add Now
+      <button
+        className="btn btn-primary mt-3"
+        type="submit"
+        disabled={status === "pending"}
+      >
+        Add Now {status == "pending" && <Loader size={15} color={"#fff"} />}
       </button>
     </form>
   );

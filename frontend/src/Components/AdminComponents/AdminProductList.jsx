@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 const AdminProductList = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
-  console.log(products);
 
   useEffect(() => {
     dispatch(getProducts());

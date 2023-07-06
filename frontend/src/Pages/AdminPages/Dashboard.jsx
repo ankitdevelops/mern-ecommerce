@@ -9,7 +9,6 @@ import ProductPhotos from "../../Components/AdminComponents/ProductPhotos";
 
 const Dashboard = () => {
   const location = useLocation();
-  const { user } = useSelector((state) => state.auth);
   const { id } = useParams();
 
   return (
@@ -19,7 +18,7 @@ const Dashboard = () => {
       {/* Main content */}
       <div className="flex flex-col flex-1">
         {/* Page content */}
-        <main className="flex-1 p-4 bg-base-100">
+        <main className="flex-1 p-4 bg-base-100 overflow-auto scrollbar-hide">
           {location.pathname === "/admin/dashboard" ? (
             <AdminProductList />
           ) : location.pathname === "/admin/dashboard/users" ? (

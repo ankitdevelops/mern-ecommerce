@@ -1,81 +1,80 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import {
+  addProductPhoto,
+  getSingleProduct,
+  clearSingleProduct,
+} from "../../features/products/productSlice";
+import Loader from "../Loader";
 
 const ProductPhotos = () => {
   const [newImage, setNewImage] = useState([]);
+  const [images, setImages] = useState([]);
+
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const { status, singleProduct } = useSelector((state) => state.products);
 
   const imageChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setNewImage(e.target.files[0]);
     }
   };
+
+  useEffect(() => {
+    dispatch(getSingleProduct(id));
+
+    return () => {
+      dispatch(clearSingleProduct());
+    };
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (singleProduct) {
+      setImages(singleProduct.photos);
+    }
+  }, [singleProduct]);
+
+  const handleUpload = () => {
+    const data = {
+      id: id,
+      image: newImage,
+    };
+
+    if (newImage.length !== 0) {
+      dispatch(addProductPhoto(data, id))
+        .unwrap()
+        .then((response) => {
+          console.log("Image Uploaded Successfully", response);
+          setNewImage([]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
   return (
     <div className="flex justify-between">
       <div className="w-9/12">
-        <h1>Current Pictures</h1>
+        <h1 className=" text-3xl lg:text-4xl title-font font-medium mb-1">
+          Current Photos
+        </h1>
         <div className="flex justify-start gap-5 my-5 flex-wrap ">
-          <div className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer">
-            <img
-              src="https://images.pexels.com/photos/3178938/pexels-photo-3178938.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1  "
-              alt="Shoes"
-              className="object-cover h-full w-full rounded-xl"
-            />
-          </div>
-          <div className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer">
-            <img
-              src="https://images.pexels.com/photos/3178938/pexels-photo-3178938.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1  "
-              alt="Shoes"
-              className="object-cover h-full w-full rounded-xl"
-            />
-          </div>
-          <div className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer">
-            <img
-              src="https://images.pexels.com/photos/3178938/pexels-photo-3178938.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1  "
-              alt="Shoes"
-              className="object-cover h-full w-full rounded-xl"
-            />
-          </div>
-          <div className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer">
-            <img
-              src="https://images.pexels.com/photos/3178938/pexels-photo-3178938.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1  "
-              alt="Shoes"
-              className="object-cover h-full w-full rounded-xl"
-            />
-          </div>
-          <div className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer">
-            <img
-              src="https://images.pexels.com/photos/3178938/pexels-photo-3178938.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1  "
-              alt="Shoes"
-              className="object-cover h-full w-full rounded-xl"
-            />
-          </div>
-          <div className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer">
-            <img
-              src="https://images.pexels.com/photos/583842/pexels-photo-583842.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              alt="Shoes"
-              className="object-cover h-full w-full rounded-xl"
-            />
-          </div>
-          <div className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer">
-            <img
-              src="https://images.pexels.com/photos/724921/pexels-photo-724921.jpeg?auto=compress&cs=tinysrgb&w=1600"
-              alt="Shoes"
-              className="object-cover h-full w-full rounded-xl"
-            />
-          </div>
-          <div className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer">
-            <img
-              src="https://images.pexels.com/photos/196659/pexels-photo-196659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              alt="Shoes"
-              className="object-cover h-full w-full rounded-xl"
-            />
-          </div>
-          <div className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer">
-            <img
-              src="https://images.pexels.com/photos/159368/laptop-iphone-coffee-notebook-159368.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              alt="Shoes"
-              className="object-cover h-full w-full rounded-xl"
-            />
-          </div>
+          {images &&
+            images.map((image, index) => (
+              <div
+                className="card bg-base-300 rounded-xl w-60 h-60 overflow-hidden cursor-pointer"
+                key={index}
+              >
+                <img
+                  src={image?.secure_url}
+                  alt={singleProduct?.name}
+                  className="object-cover h-full w-full rounded-xl"
+                />
+              </div>
+            ))}
         </div>
       </div>
       <div className="input_field flex flex-col   text-center my-5 w-3/12 mx-auto">
@@ -96,10 +95,11 @@ const ProductPhotos = () => {
               <div className="btn">Select New Picture</div>
               <button
                 className="btn ms-3 btn-info"
-                // onClick={handleUpload}
-                // disabled={status === "pending"}
+                onClick={handleUpload}
+                disabled={status === "pending"}
               >
-                Upload
+                Upload{" "}
+                {status == "pending" && <Loader size={15} color={"#fff"} />}
               </button>
             </>
           )}
