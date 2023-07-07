@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-
+import ReactMarkdown from "react-markdown";
 import Container from "../Components/Container";
 import Rating from "../Components/Rating";
 import Loader from "../Components/Loader";
+import ImageFullScreen from "../Components/ImageFullScreen";
 import {
   getSingleProduct,
   clearSingleProduct,
@@ -13,7 +14,7 @@ import {
 const ProductDetails = () => {
   const [images, setImages] = useState([]);
   const [currentImage, setCurrentImage] = useState("");
-
+  const [fullScreenImage, setFullScreenImage] = useState(null);
   const { id } = useParams();
   const dispatch = useDispatch();
   const { status, singleProduct: product } = useSelector(
@@ -35,6 +36,10 @@ const ProductDetails = () => {
     }
   }, [product, images]);
 
+  const handleCloseFullScreen = () => {
+    setFullScreenImage(null);
+  };
+
   if (!product) {
     return (
       <Container>
@@ -55,6 +60,7 @@ const ProductDetails = () => {
                 className="object-cover w-full rounded-xl"
                 src={currentImage && currentImage.secure_url}
                 alt={product && product.name}
+                onClick={() => setFullScreenImage(currentImage.secure_url)}
               />
               {/* <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
           39% OFF
@@ -76,7 +82,6 @@ const ProductDetails = () => {
                   </div>
                 ))}
             </div>
-            <Lightbox images={images}></Lightbox>
           </div>
           <div className="col-span-2 md:col-span-1 md:order-2">
             <div className="w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
@@ -90,7 +95,7 @@ const ProductDetails = () => {
                 <Rating />
               </div>
               <p className="leading w-full text-xl font-medium">
-                {product && product.description}
+                <ReactMarkdown>{product && product.description}</ReactMarkdown>
               </p>
 
               <div className="flex mt-10 items-center">
@@ -125,6 +130,13 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+      )}
+      {fullScreenImage && (
+        <ImageFullScreen
+          className="absolute w-full h-full top-0 left-0"
+          imageUrl={fullScreenImage}
+          onClose={handleCloseFullScreen}
+        />
       )}
     </Container>
   );
