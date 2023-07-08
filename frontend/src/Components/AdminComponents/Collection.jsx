@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllCollection,
@@ -9,6 +8,7 @@ import {
 import Loader from "../Loader";
 import AddCollectionModal from "./AddCollectionModal";
 import EditCollectionModal from "./EditCollectionModal";
+import DeleteCollectionModal from "./DeleteCollectionModal";
 
 const Collection = () => {
   const dispatch = useDispatch();
@@ -16,6 +16,8 @@ const Collection = () => {
   const [singleCollection, setSingleCollection] = useState("");
   const [showCollectionAddModal, setShowCollectionAddModal] = useState(false);
   const [showCollectionEditModal, setShowCollectionEditModal] = useState(false);
+  const [showCollectionDeleteModal, setShowCollectionDeleteModal] =
+    useState(false);
 
   const { collections } = useSelector((state) => state.collection);
 
@@ -67,7 +69,18 @@ const Collection = () => {
                     >
                       Edit
                     </button>{" "}
-                    /<button className="btn btn-ghost btn-xs">Delete</button>
+                    /
+                    <button
+                      className="btn btn-ghost btn-xs"
+                      onClick={() => {
+                        setSingleCollection(collection);
+                        setShowCollectionDeleteModal(
+                          !showCollectionDeleteModal
+                        );
+                      }}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -86,6 +99,14 @@ const Collection = () => {
         <EditCollectionModal
           className="absolute w-full h-full top-0 left-0"
           setShowCollectionEditModal={setShowCollectionEditModal}
+          singleCollection={singleCollection}
+        />
+      )}
+
+      {showCollectionDeleteModal && (
+        <DeleteCollectionModal
+          className="absolute w-full h-full top-0 left-0"
+          setShowCollectionDeleteModal={setShowCollectionDeleteModal}
           singleCollection={singleCollection}
         />
       )}

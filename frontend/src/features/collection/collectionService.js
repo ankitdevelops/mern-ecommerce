@@ -33,10 +33,20 @@ const updateCollection = async (data) => {
   }
 };
 
+const deleteCollection = async (id) => {
+  const response = await axios.delete(`${API_URL}${id}`, {
+    withCredentials: true,
+  });
+  if (response.data) {
+    return id;
+  }
+};
+
 const collectionService = {
   getAllCollection,
   createCollection,
   updateCollection,
+  deleteCollection,
 };
 
 export default collectionService;

@@ -45,6 +45,19 @@ export const updateCollection = createAsyncThunk(
   }
 );
 
+export const deleteCollection = createAsyncThunk(
+  "collection/deleteCollection",
+  async (id, thunkAPI) => {
+    try {
+      return await collectionService.deleteCollection(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message || error.toString()
+      );
+    }
+  }
+);
+
 export const collectionSlice = createSlice({
   name: "collection",
   initialState,
@@ -91,6 +104,12 @@ export const collectionSlice = createSlice({
       })
       .addCase(updateCollection.pending, (state) => {
         state.status = "pending";
+      })
+      .addCase(deleteCollection.fulfilled, (state, action) => {
+        state.collections = state.collections.filter(
+          (collection) => collection._id !== action.payload
+        );
+        state.status = "fulfilled";
       });
   },
 });
