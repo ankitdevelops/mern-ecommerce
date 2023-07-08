@@ -1,12 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getProducts,
   clearProducts,
 } from "../../features/products/productSlice";
 import { Link } from "react-router-dom";
+import ProductEditModal from "./ProductEditModal";
 
 const AdminProductList = () => {
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editProductId, setEditProductId] = useState("");
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
 
@@ -30,6 +33,7 @@ const AdminProductList = () => {
         <thead>
           <tr>
             <th>Product Name</th>
+
             <th>Description</th>
             <th>Price</th>
             <th>Stock</th>
@@ -57,6 +61,7 @@ const AdminProductList = () => {
                     </div>
                   </div>
                 </td>
+
                 <td>
                   {product?.description}
                   <br />
@@ -65,13 +70,29 @@ const AdminProductList = () => {
                 <td>{product?.stock}</td>
                 <td>{product?.sold}</td>
                 <th>
-                  <button className="btn btn-ghost btn-xs">Delete</button>
+                  <button
+                    className="btn btn-ghost btn-xs"
+                    onClick={() => {
+                      setShowEditModal(!showEditModal),
+                        setEditProductId(product?._id);
+                    }}
+                  >
+                    Edit
+                  </button>{" "}
+                  /<button className="btn btn-ghost btn-xs">Delete</button>
                 </th>
               </tr>
             ))}
         </tbody>
         {/* foot */}
       </table>
+      {showEditModal && (
+        <ProductEditModal
+          className="absolute w-full h-full top-0 left-0"
+          setShowEditModal={setShowEditModal}
+          editProductId={editProductId}
+        />
+      )}
     </div>
   );
 };

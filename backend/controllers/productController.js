@@ -205,7 +205,7 @@ const updateProductInfo = asyncHandler(async (req, res) => {
   const { id: productId } = req.params;
   const { name, price, description, stock, brand } = req.body;
 
-  const product = await Product.findOne({ id: productId, isActive: true });
+  const product = await Product.findOne({ _id: productId, isActive: true });
 
   if (!product) {
     res.status(404).json({ error: "no product found" });

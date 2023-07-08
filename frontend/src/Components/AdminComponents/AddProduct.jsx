@@ -132,9 +132,6 @@ const AddProduct = () => {
           value={collection}
           onChange={(e) => setCollection(e.target.value)}
         >
-          <option disabled defaultValue>
-            Choose Collection
-          </option>
           {collections &&
             collections.map((collection) => (
               <option key={collection?._id} value={collection._id}>

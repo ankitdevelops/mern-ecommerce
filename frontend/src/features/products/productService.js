@@ -38,11 +38,24 @@ const getSingleProduct = async (productId) => {
   }
 };
 
+const editProduct = async (data) => {
+  const id = data.productId;
+  delete data.productId;
+  const response = await axios.put(`${API_URL}${id}`, data, {
+    withCredentials: true,
+  });
+
+  if (response.data) {
+    return response.data;
+  }
+};
+
 const productService = {
   getAllProducts,
   addNewProduct,
   addProductPhoto,
   getSingleProduct,
+  editProduct,
 };
 
 export default productService;
