@@ -176,10 +176,10 @@ const ProductEditModal = ({ setShowEditModal, editProductId }) => {
                     <option
                       key={collection?._id}
                       value={collection?._id}
-                      // defaultValue={
-                      //   currentCollection &&
-                      //   currentCollection === collection?._id
-                      // }
+                      defaultValue={
+                        currentCollection &&
+                        currentCollection === collection?._id
+                      }
                     >
                       {collection.name}
                     </option>

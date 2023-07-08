@@ -50,12 +50,25 @@ const editProduct = async (data) => {
   }
 };
 
+const deleteProduct = async (id) => {
+  const response = await axios.delete(
+    `${API_URL}${id}`,
+
+    { withCredentials: true }
+  );
+
+  if (response.data) {
+    return id;
+  }
+};
+
 const productService = {
   getAllProducts,
   addNewProduct,
   addProductPhoto,
   getSingleProduct,
   editProduct,
+  deleteProduct,
 };
 
 export default productService;

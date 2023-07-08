@@ -72,6 +72,19 @@ export const editProduct = createAsyncThunk(
   }
 );
 
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (id, thunkAPI) => {
+    try {
+      return await productService.deleteProduct(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message || error.toString()
+      );
+    }
+  }
+);
+
 export const productSlice = createSlice({
   name: "product",
   initialState,
@@ -141,6 +154,18 @@ export const productSlice = createSlice({
       })
       .addCase(editProduct.rejected, (state, action) => {
         console.log(action.payload);
+        state.status = "rejected";
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.products = state.products.filter(
+          (product) => product._id != action.payload
+        );
+        state.status = "fulfilled";
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(deleteProduct.rejected, (state) => {
         state.status = "rejected";
       });
   },

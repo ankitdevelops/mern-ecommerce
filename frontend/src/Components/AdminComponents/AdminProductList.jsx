@@ -6,9 +6,11 @@ import {
 } from "../../features/products/productSlice";
 import { Link } from "react-router-dom";
 import ProductEditModal from "./ProductEditModal";
+import ProductDeleteModal from "./ProductDeleteModal";
 
 const AdminProductList = () => {
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editProductId, setEditProductId] = useState("");
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
@@ -79,7 +81,16 @@ const AdminProductList = () => {
                   >
                     Edit
                   </button>{" "}
-                  /<button className="btn btn-ghost btn-xs">Delete</button>
+                  /
+                  <button
+                    className="btn btn-ghost btn-xs"
+                    onClick={() => {
+                      setShowDeleteModal(!showDeleteModal),
+                        setEditProductId(product?._id);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </th>
               </tr>
             ))}
@@ -90,6 +101,14 @@ const AdminProductList = () => {
         <ProductEditModal
           className="absolute w-full h-full top-0 left-0"
           setShowEditModal={setShowEditModal}
+          editProductId={editProductId}
+        />
+      )}
+
+      {showDeleteModal && (
+        <ProductDeleteModal
+          className="absolute w-full h-full top-0 left-0"
+          setShowDeleteModal={setShowDeleteModal}
           editProductId={editProductId}
         />
       )}
