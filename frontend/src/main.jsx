@@ -30,7 +30,7 @@ const router = createBrowserRouter(
       <Route path="" element={<AdminRoute />}>
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/dashboard/collections" element={<Dashboard />} />
-        <Route path="/admin/dashboard/add-product" element={<Dashboard />} />
+        {/* <Route path="/admin/dashboard/add-product" element={<Dashboard />} /> */}
         <Route
           path="/admin/dashboard/product/add-photo/:id"
           element={<Dashboard />}

@@ -13,7 +13,7 @@ const DeleteCollectionModal = ({
     if (singleCollection) {
       dispatch(deleteCollection(singleCollection?._id))
         .unwrap()
-        .then((data) => {
+        .then((_data) => {
           toast.success(`${singleCollection?.name} deleted successfully`);
           setShowCollectionDeleteModal(false);
         })

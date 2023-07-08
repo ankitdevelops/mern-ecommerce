@@ -12,6 +12,7 @@ import {
   editProduct,
 } from "../../features/products/productSlice";
 import Loader from "../Loader";
+import { toast } from "react-toastify";
 
 const ProductEditModal = ({ setShowEditModal, editProductId }) => {
   const [productName, setProductName] = useState("");
@@ -67,10 +68,11 @@ const ProductEditModal = ({ setShowEditModal, editProductId }) => {
     dispatch(editProduct(productData))
       .unwrap()
       .then((product) => {
-        console.log(`${product.name} Updated Successfully`);
+        toast.success(`${product?.name} updated successfully`);
+        setShowEditModal(false);
       })
       .catch((error) => {
-        console.log("Error", error);
+        toast.error(error);
       });
   };
 
@@ -199,7 +201,7 @@ const ProductEditModal = ({ setShowEditModal, editProductId }) => {
               required
             />
           </div>
-          <p className="mt-2 lead">Upload New Photos</p>
+          {/* <p className="mt-2 lead">Upload New Photos</p> */}
           <div className="float-right">
             <button
               className="btn btn-primary mt-3"

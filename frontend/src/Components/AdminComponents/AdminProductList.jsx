@@ -7,10 +7,12 @@ import {
 import { Link } from "react-router-dom";
 import ProductEditModal from "./ProductEditModal";
 import ProductDeleteModal from "./ProductDeleteModal";
+import ProductAddModal from "./ProductAddModal";
 
 const AdminProductList = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showProductAddModal, setShowProductAddModal] = useState(false);
   const [editProductId, setEditProductId] = useState("");
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
@@ -24,12 +26,18 @@ const AdminProductList = () => {
 
   return (
     <div className="overflow-x-auto">
-      <Link
+      {/* <Link
         className="btn btn-primary float-right me-10 my-3"
         to={"/admin/dashboard/add-product"}
       >
         Add new Product
-      </Link>
+      </Link> */}
+      <button
+        className="btn btn-primary float-right me-10 my-3"
+        onClick={() => setShowProductAddModal(!showProductAddModal)}
+      >
+        Add new Product
+      </button>
       <table className="table">
         {/* head */}
         <thead>
@@ -40,7 +48,7 @@ const AdminProductList = () => {
             <th>Price</th>
             <th>Stock</th>
             <th>Total Sold</th>
-            <th>Action</th>
+            <th className="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -71,7 +79,7 @@ const AdminProductList = () => {
                 <td>{product?.price}</td>
                 <td>{product?.stock}</td>
                 <td>{product?.sold}</td>
-                <th>
+                <td className="text-center">
                   <button
                     className="btn btn-ghost btn-xs"
                     onClick={() => {
@@ -82,7 +90,7 @@ const AdminProductList = () => {
                     Edit
                   </button>{" "}
                   /
-                  <button
+                  <Link
                     className="btn btn-ghost btn-xs"
                     onClick={() => {
                       setShowDeleteModal(!showDeleteModal),
@@ -90,8 +98,15 @@ const AdminProductList = () => {
                     }}
                   >
                     Delete
-                  </button>
-                </th>
+                  </Link>{" "}
+                  /
+                  <Link
+                    className="btn btn-ghost btn-xs"
+                    to={`/admin/dashboard/product/add-photo/${product?._id}`}
+                  >
+                    Photos
+                  </Link>
+                </td>
               </tr>
             ))}
         </tbody>
@@ -110,6 +125,13 @@ const AdminProductList = () => {
           className="absolute w-full h-full top-0 left-0"
           setShowDeleteModal={setShowDeleteModal}
           editProductId={editProductId}
+        />
+      )}
+
+      {showProductAddModal && (
+        <ProductAddModal
+          className="absolute w-full h-full top-0 left-0"
+          setShowProductAddModal={setShowProductAddModal}
         />
       )}
     </div>

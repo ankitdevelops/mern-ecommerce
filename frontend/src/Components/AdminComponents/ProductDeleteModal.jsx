@@ -23,7 +23,7 @@ const ProductDeleteModal = ({ setShowDeleteModal, editProductId }) => {
     dispatch(deleteProduct(editProductId))
       .unwrap()
       .then((data) => {
-        toast.success("Product Deleted Successfully");
+        toast.success(`${singleProduct?.name} deleted successfully`);
         setShowDeleteModal(false);
       })
       .catch((error) => {

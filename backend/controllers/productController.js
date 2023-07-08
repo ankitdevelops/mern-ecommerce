@@ -243,7 +243,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
   product.isActive = false;
   await product.save();
 
-  res.status(204).json({ message: "product deleted successfully" });
+  res.status(200).json({ message: "product deleted successfully" });
 });
 
 /**

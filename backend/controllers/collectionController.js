@@ -21,11 +21,7 @@ const createCollection = asyncHandler(async (req, res) => {
   });
 
   if (collection) {
-    res.status(200).json({
-      success: true,
-      message: "Collection created Successfully",
-      collection,
-    });
+    res.status(200).json(collection);
   } else {
     res.status(500);
     throw new Error("something went wrong");
@@ -62,10 +58,7 @@ const updateCollection = asyncHandler(async (req, res) => {
   );
 
   if (collection) {
-    res.status(200).json({
-      message: "Collection Updated Successfully",
-      collection,
-    });
+    res.status(200).json(collection);
   } else {
     res.status(500);
     throw new Error("Collection not found");
