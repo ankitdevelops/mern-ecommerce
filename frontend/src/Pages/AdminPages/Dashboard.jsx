@@ -1,11 +1,12 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+
 import { useLocation, useParams } from "react-router-dom";
 import SideBar from "../../Components/AdminComponents/SideBar";
 import AdminProductList from "../../Components/AdminComponents/AdminProductList";
 import UserList from "../../Components/AdminComponents/UserList";
 import AddProduct from "../../Components/AdminComponents/AddProduct";
 import ProductPhotos from "../../Components/AdminComponents/ProductPhotos";
+import Collection from "../../Components/AdminComponents/Collection";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -28,6 +29,8 @@ const Dashboard = () => {
           ) : location.pathname ===
             `/admin/dashboard/product/add-photo/${id}` ? (
             <ProductPhotos />
+          ) : location.pathname === "/admin/dashboard/collections" ? (
+            <Collection />
           ) : (
             <AdminProductList />
           )}
