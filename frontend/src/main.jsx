@@ -17,6 +17,7 @@ import ProductsPage from "./Pages/ProductsPage.jsx";
 import ProductDetails from "./Pages/ProductDetails.jsx";
 import AdminRoute from "./Components/AdminRoute.jsx";
 import Dashboard from "./Pages/AdminPages/Dashboard.jsx";
+import ProductByCollectionPage from "./Pages/ProductByCollectionPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,10 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/products" element={<ProductsPage />} />
       <Route path="/products/:id" element={<ProductDetails />} />
+      <Route
+        path="/products/collection/:id"
+        element={<ProductByCollectionPage />}
+      />
       {/* Admin Routes */}
       <Route path="" element={<AdminRoute />}>
         <Route path="/admin/dashboard" element={<Dashboard />} />

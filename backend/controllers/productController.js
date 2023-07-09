@@ -127,7 +127,10 @@ const getProductById = asyncHandler(async (req, res) => {
     throw new Error("Invalid request");
   }
 
-  const product = await Product.findOne({ _id: productId, isActive: true });
+  const product = await Product.findOne({
+    _id: productId,
+    isActive: true,
+  });
 
   if (product) {
     res.status(200).json(product);
@@ -149,22 +152,21 @@ const getProductById = asyncHandler(async (req, res) => {
  */
 const getProductByCollection = asyncHandler(async (req, res) => {
   const { id: collectionId } = req.params;
-  console.log("first");
 
   const collection = await Collection.findOne({
     _id: collectionId,
     isActive: true,
   });
-  console.log(collection);
+
   if (!collection) {
     return res.status(404).json({ error: "Collection not found" });
   }
 
   const products = await Product.find({
-    collectionId: collection,
+    collectionId: collection._id,
     isActive: true,
   });
-  console.log(products);
+
   if (products) {
     res.status(200).json(products);
   } else {

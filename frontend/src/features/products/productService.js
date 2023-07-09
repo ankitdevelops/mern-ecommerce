@@ -62,6 +62,15 @@ const deleteProduct = async (id) => {
   }
 };
 
+const getProductByCollection = async (id) => {
+  const response = await axios.get(`${API_URL}collection/${id}`, {
+    withCredentials: true,
+  });
+  if (response.data) {
+    return response.data;
+  }
+};
+
 const productService = {
   getAllProducts,
   addNewProduct,
@@ -69,6 +78,7 @@ const productService = {
   getSingleProduct,
   editProduct,
   deleteProduct,
+  getProductByCollection,
 };
 
 export default productService;

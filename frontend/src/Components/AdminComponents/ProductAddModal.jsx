@@ -42,11 +42,9 @@ const ProductAddModal = ({ setShowProductAddModal }) => {
       collectionId: collection,
     };
 
-    console.log(productData);
     dispatch(addNewProduct(productData))
       .unwrap()
       .then((product) => {
-        console.log(`${product.name} Added To the Stock`);
         setShowProductAddModal(false);
         toast.success(`${product?.name} added successfully`);
       })
@@ -138,7 +136,6 @@ const ProductAddModal = ({ setShowProductAddModal }) => {
                 className="select input-lg w-full border-slate-700"
                 value={collection}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setCollection(e.target.value);
                 }}
               >

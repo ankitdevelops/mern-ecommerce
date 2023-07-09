@@ -43,10 +43,12 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Collection",
     },
-    reviews: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Review",
-    },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
     isActive: {
       type: Boolean,
       default: true,
