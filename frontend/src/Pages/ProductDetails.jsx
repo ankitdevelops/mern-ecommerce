@@ -10,6 +10,7 @@ import {
   getSingleProduct,
   clearSingleProduct,
 } from "../features/products/productSlice";
+import Review from "../Components/Review";
 
 const ProductDetails = () => {
   const [images, setImages] = useState([]);
@@ -82,6 +83,7 @@ const ProductDetails = () => {
                   </div>
                 ))}
             </div>
+            <Review className=" mt-10" />
           </div>
           <div className="col-span-2 md:col-span-1 md:order-2">
             <div className="w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
