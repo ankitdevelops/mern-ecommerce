@@ -93,8 +93,14 @@ const ProductDetails = () => {
               <h1 className=" text-3xl lg:text-4xl title-font font-medium mb-1">
                 {product && product.name}
               </h1>
-              <div className="flex mb-4">
-                <Rating />
+              <div className="flex mb-4 items-center">
+                <Rating value={product?.averageRating} />{" "}
+                <p className="ms-3">
+                  <span className="text-xl font-semibold ">
+                    {product?.totalReviews}
+                  </span>{" "}
+                  people reviewed this product
+                </p>
               </div>
 
               <ReactMarkdown>{product && product.description}</ReactMarkdown>

@@ -130,10 +130,30 @@ const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findOne({
     _id: productId,
     isActive: true,
-  });
+  }).populate("reviews");
+
+  const reviews = product?.reviews;
+  const sumOfRatings = reviews.reduce((sum, item) => sum + item.rating, 0);
+  const reviewsNumber = reviews.length;
+  const averageRating = Math.ceil(sumOfRatings / reviewsNumber);
 
   if (product) {
-    res.status(200).json(product);
+    res.status(200).json({
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      stock: product.stock,
+      sold: product.sold,
+      brand: product.brand,
+      collectionId: product.collectionId,
+      isActive: product.isActive,
+      photos: product.photos,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      averageRating: averageRating,
+      totalReviews: reviewsNumber,
+    });
   } else {
     res.status(404).json({
       success: false,

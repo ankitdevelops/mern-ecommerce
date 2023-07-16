@@ -6,6 +6,7 @@ import {
 } from "../features/reviews/reviewSlice";
 import { useParams } from "react-router-dom";
 import Loader from "./Loader";
+import Rating from "./Rating";
 const ReviewList = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -27,7 +28,7 @@ const ReviewList = () => {
     );
   }
 
-  if (!review) {
+  if (!review || review.length === 0) {
     return (
       <div className="flex justify-center">
         <p>No Review Found, Be first one to review this product</p>
@@ -55,7 +56,9 @@ const ReviewList = () => {
                     <p>{reviewItem?.createdAt}</p>
                   </div>
                 </div>
-                <div className="float-right ">{reviewItem?.rating} stars</div>
+                <div className="float-right ">
+                  <Rating value={reviewItem?.rating} />
+                </div>
               </div>
               <div className="mt-3 mb-2">{reviewItem?.comment}</div>
             </div>
