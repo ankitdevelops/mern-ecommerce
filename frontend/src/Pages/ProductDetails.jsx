@@ -54,7 +54,7 @@ const ProductDetails = () => {
   return (
     <Container>
       {product && (
-        <div className="grid grid-cols-2 gap-10 items-center my-10 ">
+        <div className="grid grid-cols-2 gap-10  my-10 ">
           <div className="col-span-2 md:col-span-1 md:order-1">
             <div className="relative mx-3 mt-3 flex max-h-96 overflow-hidden rounded-xl w-full">
               <img
@@ -96,9 +96,8 @@ const ProductDetails = () => {
               <div className="flex mb-4">
                 <Rating />
               </div>
-              <p className="leading w-full text-xl font-medium">
-                <ReactMarkdown>{product && product.description}</ReactMarkdown>
-              </p>
+
+              <ReactMarkdown>{product && product.description}</ReactMarkdown>
 
               <div className="flex mt-10 items-center">
                 <p>

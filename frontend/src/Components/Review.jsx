@@ -1,14 +1,15 @@
 import React from "react";
 import ReviewForm from "./ReviewForm";
+import ReviewList from "./ReviewList";
 
 const Review = () => {
   return (
-    <div className="card w-full bg-base-200 shadow-xl ">
-      <div className="card-body">
-        {/* review Form */}
-        <ReviewForm />
-      </div>
-    </div>
+    <>
+      {/* review Form */}
+      <ReviewForm />
+      {/* review list */}
+      <ReviewList />
+    </>
   );
 };
 
